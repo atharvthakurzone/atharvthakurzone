@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Registration Form</h2>
+    <form id="registrationForm">
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required>
+
+        <label for="mobile">Mobile Number:</label>
+        <input type="text" id="mobile" name="mobile" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+        <input type="button" value="Register" onclick="handleRegister()">
+        <div id="responseMessage" class="error"></div>
+    </form>
+</div>
+
+<script>
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbw2rPhA7kUScTrW88PhpcRIDantW9f1l1ye8NBbV6Di8eGsdTqRZgQaMiDysD2D2cg2vQ/exec';
+
+    function handleRegister() {
+        const fullname = document.getElementById('fullname').value;
+        const mobile = document.getElementById('mobile').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const responseMessage = document.getElementById('responseMessage');
+
+        // Clear previous messages
+        responseMessage.style.display = 'none';
+
+        if (password !== confirmPassword) {
+            responseMessage.textContent = 'Passwords do not match';
+            responseMessage.className = 'error';
+            responseMessage.style.display = 'block';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('fullname', fullname);
+        formData.append('mobile', mobile);
+        formData.append('password', password);
+
+        fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors', // Add this line
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            responseMessage.textContent = 'Registration successful!';
+            responseMessage.className = 'success';
+            responseMessage.style.display = 'block';
+        })
+        .catch(error => {
+            responseMessage.textContent = 'Registration failed. Please try again.';
+            responseMessage.className = 'error';
+            responseMessage.style.display = 'block';
+            console.error(error);
+        });
+    }
+</script>
+
+</body>
+</html>
